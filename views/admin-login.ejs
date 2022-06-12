@@ -1,0 +1,31 @@
+<%-     include('partials/header');      -%>
+
+<body>
+    
+        <form action="/" enctype="multipart/form-data">
+            <fieldset >
+                <legend><b><h2>Admin Log in</h2></b></legend>
+                    <label for="email"></label>
+                    <input type="email" placeholder="Enter email address" name="email" id="admin_name"><br>
+                    <label for="password"></label>
+                    <input type="password" placeholder="Enter password" name="password" id="admin_pass"><br>
+                    <button class="login_btn" id="login_button" class="btn btn-primary">Login</button>
+            </fieldset>
+        </form>
+
+        <script>
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // get the values
+                const email = form.email.value;
+                const password = form.password.value;
+
+                console.log(email,password);
+            });
+
+        </script>
+
+</body>
