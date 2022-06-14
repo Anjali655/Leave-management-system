@@ -2,9 +2,13 @@ const { Router } = require("express");
 const router = Router();
 const authController = require("../controllers/authController");
 
-// router.get("/admin-login", authController.admin_login_get);
+router.post("/admin-signup", authController.admin_signup);
 
-// router.post("/admin-login", authController.admin_login_post);
+router.get("/admin-login", authController.admin_login_get);
+
+router.post("/admin-login", authController.admin_login_post);
+
+router.get("/admin-dashboard", authController.admin_dashboard_get);
 
 router.get("/add-emp", authController.add_emp_get);
 

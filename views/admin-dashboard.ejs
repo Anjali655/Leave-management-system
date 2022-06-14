@@ -10,7 +10,7 @@
         <li>
           <a href="#" class="active">
             <i class='bx bx-user' ></i>
-            <span class="links_name">Employees</span>
+           <span class="links_name employees" id="employees">Employees</span>
           </a>
         </li>
         <li>
@@ -71,6 +71,12 @@ sidebarBtn.onclick = function() {
 }else
   sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
 }
+
+  document.getElementById("employees").addEventListener("click",emp);
+
+  function emp(){
+     location.assign("/manage-emp")
+  }
  </script>
 
 </body>

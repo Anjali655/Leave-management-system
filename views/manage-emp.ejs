@@ -62,7 +62,7 @@
               <span class="text">Down From Today</span>
             </div> -->
           </div>
-          <a href="#" style="font-size:50px;"><i class='bx bx-add-to-queue'></i></a>
+          <button class="add_emp"><a href="#" style="font-size:37px;"><i class='bx bx-add-to-queue'></i></a></button>
         </div>
       </div>
 
@@ -170,6 +170,12 @@ sidebarBtn.onclick = function() {
 }else
   sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
 }
+
+  let addEmp = document.querySelector(".add_emp");
+  addEmp.onclick = function() {
+      location.assign("/add-emp");
+  }
+
  </script>
 
 </body>

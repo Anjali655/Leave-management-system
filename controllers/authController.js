@@ -1,9 +1,10 @@
-// const Admin = require("../models/admin");
+const Admin = require("../models/admin");
 const Employee = require("../models/emp");
 const jwt = require("jsonwebtoken");
 
 // handle errors
 const handleErrors = (err) => {
+  console.log(err);
   console.error(err.message, err.code);
   let errors = { email: "", password: "" };
 
@@ -34,7 +35,7 @@ const handleErrors = (err) => {
 };
 
 // creating json web token
-const maxAge = 1 * 24 * 60 * 60;
+const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
   return jwt.sign({ id }, "codeDrill secret", {
     expiresIn: maxAge,
@@ -43,21 +44,39 @@ const createToken = (id) => {
 
 //Controller actions
 
-// module.exports.admin_login_get = (req, res) => {
-//   res.render("admin-login");
-// };
+module.exports.admin_signup = async (req, res) => {
+  const { email, password } = req.body;
 
-// module.exports.admin_login_post = async (req, res) => {
-//   const { email, password } = req.body;
+  try {
+    let admin = await Admin.create({ email, password });
+    res.status(200).json({ admin: admin });
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+};
 
-//   try {
-//     const admin = await Admin.create({ email, password });
-//     res.status(200).json(admin);
-//   } catch (err) {
-//     const errors = handleErrors(err);
-//     res.status(400).json({ errors });
-//   }
-// };
+module.exports.admin_login_get = (req, res) => {
+  res.render("admin-login");
+};
+
+module.exports.admin_login_post = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const admin = await Admin.login(email, password);
+    let token = createToken(admin._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ admin: admin });
+  } catch (err) {
+    const errors = handleErrors(err);
+    res.status(400).json({ errors });
+  }
+};
+
+module.exports.admin_dashboard_get = async function (req, res) {
+  res.render("admin-dashboard");
+};
 
 module.exports.add_emp_get = (req, res) => {
   res.render("add-emp");
@@ -68,8 +87,6 @@ module.exports.add_emp_post = async (req, res) => {
 
   try {
     let employee = await Employee.create({ email, password });
-    const token = createToken(employee._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(200).json({ employee: employee._id });
   } catch (err) {
     const errors = handleErrors(err);
@@ -91,11 +108,15 @@ module.exports.emp_dashboard_get = (req, res) => {
 
 module.exports.emp_login_post = async (req, res) => {
   const { email, password } = req.body;
+  // console.log(email, password);
 
   try {
     const employee = await Employee.login(email, password);
+    const token = createToken(employee._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(200).json({ employee: employee._id });
   } catch (err) {
-    res.status(404).json("employee not exists");
+    const errors = handleErrors(err);
+    res.status(404).json({ errors });
   }
 };
