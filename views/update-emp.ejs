@@ -1,0 +1,58 @@
+<%-         include('partials/header');      -%>
+<body>
+    
+        <form action="/" enctype="multipart/form-data">
+            <fieldset >
+                <legend><b><h3>Update Employee</h3></b></legend>
+                    <label for="name"></label>
+                    <input type="text" placeholder="Enter name" name="name" id="emp_name" value="<%= emp.name %>"><br>
+
+                    <label for="Department"></label>
+                    <input type="text" placeholder="Enter Department" name="department" id="emp_pass" value="<%= emp.department %>"><br>
+
+                    <label for="email"></label>
+                    <input type="email" placeholder="Enter email" name="email" id="emp_name" value="<%= emp.email %>" required/><br>
+
+                    <label for="Mobile no."></label>
+                    <input type="text" placeholder="Enter Mobile no." name="mobile" id="admin_pass" value="<%= emp.mobile %>"><br>
+
+
+                    <button class="login_btn" id="login_button" class="btn btn-primary">Submit</button>
+            </fieldset>
+        </form>
+
+        <script>
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', async(e) => {
+                e.preventDefault();
+
+                // get the values
+                 const name = form.name.value;
+                 const department = form.department.value;
+                 const email = form.email.value;
+                 const mobile = form.mobile.value;
+
+                 try{
+                    const res = await fetch(`/update-emp/${id}`, {
+                        method: "GET",
+                        body: JSON.stringify({ name, department, email, mobile }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    console.log(res, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                    const data = await res.json();
+                    console.log(data);
+                    
+                   if(data.employee){
+                    location.assign("/manage-emp");
+                   }
+                 }
+                 catch(err){
+                    console.log(err);
+                 }
+            });
+
+        </script>
+        
+
+</body>

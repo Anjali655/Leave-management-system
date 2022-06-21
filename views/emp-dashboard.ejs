@@ -11,13 +11,13 @@
         <li>
           <a href="#" class="active">
             <i class='bx bxs-rocket' ></i>
-            <span class="links_name">Applied Leaves</span>
+            <span class="links_name" id="apply_leave">Apply for Leave</span>
           </a>
         </li>
         <li>
             <a href="#">
                 <i class='bx bx-box'></i>
-              <span class="links_name">My Leaves</span>
+              <span class="links_name" id="my_leaves">My Leaves</span>
             </a>
           </li>
 
@@ -178,6 +178,19 @@ sidebarBtn.onclick = function() {
 }else
   sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
 }
+
+document.getElementById("apply_leave").addEventListener("click",app_leave)
+
+function app_leave(){
+  location.assign("/apply-leave");
+}
+
+document.getElementById("my_leaves").addEventListener("click",my_leaves )
+
+function my_leaves(){
+  location.assign("/my-leaves");
+}
+
  </script>
 
 </body>

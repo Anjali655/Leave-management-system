@@ -1,0 +1,69 @@
+
+<%-         include('partials/header4');      -%>
+<body>
+       
+        <form action="/" enctype="multipart/form-data">
+            <fieldset >
+                <legend><b><h2>Compose leave</h2></b></legend>
+            
+                
+                    <label for="from">From</label>
+                    <input type="text" name="from" id="emp_name" class="datepicker" required/><br>
+                    <!-- <input type="text" id="datepicker" /> -->
+                   
+                    <label for="to">To</label><br>
+                    <input type="text" name="to" id="emp_pass" class="datepicker" required/><br>
+
+                    <!-- <label for="to">To</label><br>
+                    <input type="date" name="to" id="emp_pass"  placeholder="mm-dd-yyyy" 
+                    min="2022-01-20" max="2032-02-20"required/><br> -->
+                    
+                    <label for="to">Reason for leave</label><br>
+                    <input type="text" name="reason_for_leave" id="emp_pass" required/><br>
+
+
+                    <button class="login_btn" id="login_button" class="btn btn-primary">Submit</button>
+                    
+            </fieldset>
+            
+           
+           <script>
+                
+                const form = document.querySelector('form');
+                const from = document.querySelector("from");
+                const to = document.querySelector("to");
+                const reasonforleave = document.querySelector("reason_for_leave");
+
+                form.addEventListener("submit", async(e) => {
+                    e.preventDefault();
+
+                    // get the values of input types
+                    const from = form.from.value;
+                    const to = form.to.value;
+                    const reason_for_leave = form.reason_for_leave.value;
+
+                    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+                    try{    
+                        const res = await fetch("/applyleaveform", { 
+                            method: "POST",
+                            body: JSON.stringify({from, to, reason_for_leave}),
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        
+                        console.log(res);
+                        console.log(res.status,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+                        const data = res.json();
+                        
+                        if(res.status === 200){
+                            location.assign("/apply-leave");
+                        }
+                    }catch(err){
+                        console.log(err);
+                    }
+
+                });
+            
+            </script>
+        </form>

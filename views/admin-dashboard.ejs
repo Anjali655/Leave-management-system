@@ -16,7 +16,7 @@
         <li>
           <a href="#">
             <i class='bx bxs-rocket' ></i>
-            <span class="links_name">Leaves</span>
+            <span class="links_name" id="leaves">Leaves</span>
           </a>
         </li>
 
@@ -76,6 +76,12 @@ sidebarBtn.onclick = function() {
 
   function emp(){
      location.assign("/manage-emp")
+  }
+
+  document.getElementById("leaves").addEventListener("click",leaves);
+
+  function leaves(){
+    location.assign("/manage-leaves");
   }
  </script>
 

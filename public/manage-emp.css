@@ -6,6 +6,11 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
+
+table, th, td {
+  border:1px solid black;
+}
+
 .sidebar{
   position: fixed;
   height: 100%;

@@ -24,12 +24,12 @@ const dbURL = "mongodb://localhost:27017/lmsdb";
 
 mongoose
   .connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((result) => app.listen(PORT))
+  .then((result) => console.log(`Database connected`))
   .catch((err) => console.log(err));
 
 //cookies
 // app.get("/set-cookies", (req, res) => {
-  // res.setHeader("Set-Cookie", "newUser=true");
+// res.setHeader("Set-Cookie", "newUser=true");
 //   res.cookie("isEmployee", true, {
 //     maxAge: 1000 * 60 * 60 * 24,
 //     httpOnly: true,
@@ -42,7 +42,10 @@ mongoose
 //   res.json(cookies);
 // });
 
-
 // app.get("/", (req, res) => {
 //   res.sendFile(__dirname + "../views/login.html");
 // });
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});

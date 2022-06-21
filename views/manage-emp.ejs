@@ -1,6 +1,8 @@
 
-   <%-           include('partials/header3');         -%>
    
+   
+   <%-           include('partials/header3');         -%>
+
 <body>
   <div class="sidebar">
     <div class="logo-details">
@@ -32,7 +34,7 @@
       </div>
     
       <div class="profile-details">
-        <img src="../public/admin.jpg" alt="">
+        <img src="/admin.jpg" alt="">
         <span class="admin_name">Anjali</span>
 
       </div>
@@ -44,7 +46,7 @@
         <div class="box">
           <div class="right-side">
             <div class="box-topic">Total Employees</div>
-            <div class="number">100</div>
+            <div class="number"> <%= emp.length %></div>
             <div class="indicator">
               <!-- <i class='bx bx-up-arrow-alt'></i>
               <span class="text">Up from yesterday</span> -->
@@ -65,103 +67,103 @@
           <button class="add_emp"><a href="#" style="font-size:37px;"><i class='bx bx-add-to-queue'></i></a></button>
         </div>
       </div>
+      
 
+           
       <div class="sales-boxes">
         <div class="recent-sales box">
           <div class="title">Employees list
             <span><i class='bx bxs-cart-add cart two' ></i></span>
           </div>
           
-          <div class="sales-details">
-            <!-- <ul class="details">
+          <table style="width:100%">
+            <tr>
+              <div class="sales-details">
+             <!-- <th> <ul class="details">
               <li class="topic">Sr.No.</li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-              <li><a href="#">02 Jan 2021</a></li>
-            </ul> -->
-            <ul class="details">
-            <li class="topic">Name</li>
-            <li><a href="#">Ravi</a></li>
-            <li><a href="#">David </a></li>
-            <li><a href="#">Roe </a></li>
-            <li><a href="#">Diana </a></li>
-            <li><a href="#">Martin</a></li>
-            <li><a href="#">Doe </a></li>
-            <li><a href="#">Aiana </a></li>
-            <li><a href="#">Rexel </a></li>
-             <li><a href="#">Tiana </a></li>
-          </ul>
-          <ul class="details">
-            <li class="topic">Departments</li>
-            <li><a href="#">Mern stack</a></li>
-            <li><a href="#">IOS</a></li>
-            <li><a href="#">Android</a></li>
-            <li><a href="#">Mern stack</a></li>
-            <li><a href="#">Mern stack</a></li>
-            <li><a href="#">Android</a></li>
-            <li><a href="#">Mern stack</a></li>
-            <li><a href="#">IOS</a></li>
-            <li><a href="#">Android</a></li>
+              <li><a href="#">|</a></li>
+            </ul></th> -->
             
-          </ul>
-          <ul class="details">
-            <li class="topic">Email</li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-            <li><a href="#">abc@gmail.com</a></li>
-           
-          </ul>
-          <ul class="details">
-            <li class="topic">Mobile No.</li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-            <li><a href="#">1234567890</a></li>
-          </ul>
+              <th><ul class="details">
+                <li class="topic">Name</li>
+              </ul></th>
+            
+              <th><ul class="details">
+                <li class="topic">Department</li>
+              </ul></th>
+          
+              <th><ul class="details">
+                <li class="topic">Email</li>
+              </ul></th>
+                
+              <th><ul class="details">
+                <li class="topic">Mobile No.</li>
+              </ul></th>
 
-          <ul class="details">
-            <li class="topic">Del Emp</li>
-            <li><a href="#" style="text-align:center;"}><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-            <li><a href="#" style="text-align:center;"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
-          </ul>
+              <th><ul class="details">
+                <li class="topic">Del Emp</li>
+              </ul></th>
+          
+              <th><ul class="details">
+                <li class="topic">Update Emp</li>
+              </ul></th>
+              </div>
 
-          </div>
-          <div class="button">
-            <a href="#">See All</a>
-          </div>
-        </div>
+            </tr>
+              
+            <div class="sales-details">
+              <tr>
+            
+              <% for(var i=0; i<emp.length; i++) {%>
+              <div class="sales-details">
+
+              <th><ul class="details">
+                <li><a href="#"> <%= emp[i].name %></ a></li>
+              </ul></th>
+          
+              <th><ul class="details">
+                <li><a href="#"> <%= emp[i].department %></a></li>
+              </ul></th>
         
+              <th><ul class="details">
+                <li><a href="#"> <%= emp[i].email %></a></li>
+              </ul></th>
+
+              <th><ul class="details">
+                <li><a href="#"> <%= emp[i].mobile %></a></li>
+              </ul></th>
+              
+              <th><ul class="details">
+                <li><a href="#" style="text-align:center;" id="del_emp" onclick="deleteItem(`<%= emp[i]._id %>`)"><i class='bx bx-message-square-minus Del-Emp'></i></a></li>
+              </ul></th>
+          
+              <th><ul class="details">
+                <button class="update_emp"><li><a href="/update-emp/<%= emp[i]._id %>" style="text-align:center;font-size:20px;"  ><i class='bx bx-refresh Del-Emp'></i></a></li></button>
+              </ul></th>
+
+              </tr>
+            </div>
+        </div>
+          <% } %>
+
+        </table><br>
+
+        <%if(emp.length == 0 ){ %>
+          <div style="text-align:center;">
+            <h1><b>NO DATA AVAILABLE</b></h1> 
+          </div>
+        <% } %>
+
+
+        </div>
         </div>
       </div>
     </div>
   </section>
 
   <script>
-   let sidebar = document.querySelector(".sidebar");
+ 
+let sidebar = document.querySelector(".sidebar");
 let sidebarBtn = document.querySelector(".sidebarBtn");
 sidebarBtn.onclick = function() {
   sidebar.classList.toggle("active");
@@ -175,6 +177,28 @@ sidebarBtn.onclick = function() {
   addEmp.onclick = function() {
       location.assign("/add-emp");
   }
+
+  let updateEmp = document.querySelector(".update_emp");
+  updateEmp.onclick = function(){
+      location.assign("/update-emp");
+  }
+
+  async function deleteItem(id) {
+    const deleted = await fetch(`/delete-emp/${id}`, {
+    method: "DELETE",
+    headers: {"Content-Type":"application/json"}
+      });
+      location.reload();
+  };
+
+  async function updateItem(id) {
+    const deleted = await fetch(`/update-emp/${id}`, {
+    method: "PUT",
+    headers: {"Content-Type":"application/json"}
+      });
+      
+  };
+
 
  </script>
 
