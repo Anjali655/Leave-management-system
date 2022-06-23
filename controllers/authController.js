@@ -130,6 +130,7 @@ module.exports.update_emp_get = async (req, res) => {
   let emp = await Employee.findById(req.params.id);
 
   let Data = {
+    id: req.params.id,
     name: emp.name,
     department: emp.department,
     email: emp.email,
@@ -157,22 +158,6 @@ module.exports.update_emp_put = async (req, res) => {
     .catch((err) => console.log(err));
 };
 
-module.exports.update_emp_put = async (req, res) => {
-  let allEmp = await Employee.findById(id);
-
-  let newData = await Promise.all(
-    allEmp.map((emp) => {
-      return {
-        name: emp.name,
-        department: emp.department,
-        email: emp.email,
-        mobile: emp.mobile,
-      };
-    })
-  );
-  res.render("manage-emp", { emp: newData });
-};
-
 module.exports.manage_emp_get = async (req, res) => {
   let allEmp = await Employee.find({});
 
@@ -191,7 +176,25 @@ module.exports.manage_emp_get = async (req, res) => {
 };
 
 module.exports.manage_leaves_get = async (req, res) => {
-  res.render("manage-leaves");
+  let allleaves = await Leave.find({});
+  let newLeaves = await Promise.all(
+    allleaves.map(async (leave) => {
+      let emp = await Employee.findById(leave.emp_id);
+
+      return {
+        leave: {
+          from: leave.from,
+          to: leave.to,
+          reason_for_leave: leave.reason_for_leave,
+        },
+        emp: {
+          name: emp ? emp.name : "N/A",
+        },
+      };
+    })
+  );
+  console.log(newLeaves, "newLeaves >>>>>>>>>>>");
+  res.render("manage-leaves", { leave: newLeaves });
 };
 
 module.exports.emp_login_get = (req, res) => {
@@ -221,8 +224,6 @@ module.exports.apply_leave_get = async (req, res) => {
   let allleaves = await Leave.find({});
   let newLeaves = await Promise.all(
     allleaves.map((leave) => {
-      // console.log(typeof leave.from);
-      // console.log(typeof leave.to);
       return {
         from: leave.from,
         to: leave.to,
@@ -238,8 +239,6 @@ module.exports.my_leaves_get = async (req, res) => {
   let allleaves = await Leave.find({});
   let newLeaves = await Promise.all(
     allleaves.map((leave) => {
-      // console.log(typeof leave.from);
-      // console.log(typeof leave.to);
       return {
         from: leave.from,
         to: leave.to,
@@ -255,23 +254,23 @@ module.exports.apply_leave_form_get = (req, res) => {
 };
 
 module.exports.apply_leave_form_post = async (req, res) => {
-  const { from, to, reason_for_leave } = req.body;
-  // console.log(from);
-  // console.log(to);
-  // console.log(reason_for_leave);
-  const newFrom = new Date(Date.parse(from));
-  const newTo = new Date(Date.parse(to));
-  // const newFrom = new Date(from);
-  // const newTo = new Date(to);
-  // console.log(typeof "05/01/2020", typeof to, newFrom, newTo);
-  // console.log(from, to);
+  const { from, to, reason_for_leave, emp_id } = req.body;
+  console.log(from, "from>>>>>>>>");
+  var startDate = from.split("-").reverse().join("-");
+  // const hello = toString(from.split("-").reverse().join("-"));
+  // console.log(hello, "hello");
+  var endDate = to.split("-").reverse().join("-");
+  // console.log(toString(startDate), "startDate>>>>>>>>>>>>>>>");
   try {
     // let leave = Leave.create({ from: newFrom, to: newTo, reason_for_leave });
     let leave = await Leave.create({
-      from: newFrom,
-      to: newTo,
-      reason_for_leave,
+      emp_id: emp_id,
+      from: startDate,
+      to: endDate,
+      reason_for_leave: reason_for_leave,
+      status: "Pending",
     });
+
     res.status(200).json({ leave });
   } catch (err) {
     console.log(err);

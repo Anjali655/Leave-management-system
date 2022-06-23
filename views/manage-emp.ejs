@@ -1,6 +1,4 @@
 
-   
-   
    <%-           include('partials/header3');         -%>
 
 <body>
@@ -79,10 +77,6 @@
           <table style="width:100%">
             <tr>
               <div class="sales-details">
-             <!-- <th> <ul class="details">
-              <li class="topic">Sr.No.</li>
-              <li><a href="#">|</a></li>
-            </ul></th> -->
             
               <th><ul class="details">
                 <li class="topic">Name</li>
@@ -195,7 +189,7 @@ sidebarBtn.onclick = function() {
     const deleted = await fetch(`/update-emp/${id}`, {
     method: "PUT",
     headers: {"Content-Type":"application/json"}
-      });
+      }); 
       
   };
 
