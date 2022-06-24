@@ -28,19 +28,19 @@ mongoose
   .catch((err) => console.log(err));
 
 //cookies
-// app.get("/set-cookies", (req, res) => {
-// res.setHeader("Set-Cookie", "newUser=true");
-//   res.cookie("isEmployee", true, {
-//     maxAge: 1000 * 60 * 60 * 24,
-//     httpOnly: true,
-//   });
-//   res.send("You got the Cookies!");
-// });
+app.get("/set-cookies", (req, res) => {
+  res.setHeader("Set-Cookie", "newUser=true");
+  res.cookie("isEmployee", true, {
+    maxAge: 1000 * 60 * 60 * 24,
+    // httpOnly: true,
+  });
+  res.send("You got the Cookies!");
+});
 
-// app.get("/read-cookies", (req, res) => {
-//   const cookies = req.cookies;
-//   res.json(cookies);
-// });
+app.get("/read-cookies", (req, res) => {
+  const cookies = req.cookies;
+  res.json(cookies);
+});
 
 // app.get("/", (req, res) => {
 //   res.sendFile(__dirname + "../views/login.html");

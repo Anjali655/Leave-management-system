@@ -39,8 +39,9 @@ const handleErrors = (err) => {
 
 // creating json web token
 const maxAge = 3 * 24 * 60 * 60;
+let emp_id = Leave.emp_id;
 const createToken = (id) => {
-  return jwt.sign({ id }, "codeDrill secret", {
+  return jwt.sign({ id, emp_id: emp_id }, "codeDrill secret", {
     expiresIn: maxAge,
   });
 };
@@ -212,6 +213,7 @@ module.exports.emp_login_post = async (req, res) => {
   try {
     const employee = await Employee.login(email, password);
     const token = createToken(employee._id);
+    console.log(token);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
     res.status(200).json({ employee: employee._id });
   } catch (err) {
@@ -254,8 +256,13 @@ module.exports.apply_leave_form_get = (req, res) => {
 };
 
 module.exports.apply_leave_form_post = async (req, res) => {
-  const { from, to, reason_for_leave, emp_id } = req.body;
-  console.log(from, "from>>>>>>>>");
+  const cookieData = req.cookies;
+  const jwtData = cookieData.jwt;
+  var decoded = jwt.verify(jwtData, "codeDrill secret");
+  console.log(decoded, "decoded >>>>>>>>>>>>>");
+
+  const { from, to, reason_for_leave } = req.body;
+  //console.log(from, "from>>>>>>>>");
   var startDate = from.split("-").reverse().join("-");
   // const hello = toString(from.split("-").reverse().join("-"));
   // console.log(hello, "hello");
@@ -264,13 +271,13 @@ module.exports.apply_leave_form_post = async (req, res) => {
   try {
     // let leave = Leave.create({ from: newFrom, to: newTo, reason_for_leave });
     let leave = await Leave.create({
-      emp_id: emp_id,
+      emp_id: decoded.id,
       from: startDate,
       to: endDate,
       reason_for_leave: reason_for_leave,
       status: "Pending",
     });
-
+    // console.log(leave, "leave >>>>>>>>>>>>>>>>>>>>>>");
     res.status(200).json({ leave });
   } catch (err) {
     console.log(err);

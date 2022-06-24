@@ -6,7 +6,7 @@
         <b><h2>Compose leave</h2></b>
       </legend>
 
-      <input type="text" name="emp_id" id="emp_pass" required />
+      <!-- <input type="text" name="emp_id" id="emp_pass" required /> -->
       <label for="from">From</label>
       <input
         type="text"
@@ -48,24 +48,24 @@
         e.preventDefault();
 
         // get the values of input types
-        const emp_id = form.emp_id.value;
+        // const emp_id = form.emp_id.value;
         const from = form.from.value;
         const to = form.to.value;
         const reason_for_leave = form.reason_for_leave.value;
 
-
         try {
           const res = await fetch("/applyleaveform", {
             method: "POST",
-            body: JSON.stringify({ emp_id, from, to, reason_for_leave }),
+            body: JSON.stringify({ from, to, reason_for_leave }),
             headers: { "Content-Type": "application/json" },
           });
 
-          console.log(res);
-          console.log(
-            res.status,
-            ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-          );
+          //       const cookie =document.cookie;
+          // }
+          // console.log(cookie,"cookie")
+
+          console.log(decoded.emp_id);
+          console.log(decoded);
 
           const data = res.json();
 
