@@ -176,6 +176,8 @@ module.exports.manage_emp_get = async (req, res) => {
   res.render("manage-emp", { emp: newData });
 };
 
+// onclick="approve(`<%= leave[i].emp.name %>`)"
+
 module.exports.manage_leaves_get = async (req, res) => {
   let allleaves = await Leave.find({});
   let newLeaves = await Promise.all(
@@ -184,9 +186,11 @@ module.exports.manage_leaves_get = async (req, res) => {
 
       return {
         leave: {
+          id: leave._id,
           from: leave.from,
           to: leave.to,
           reason_for_leave: leave.reason_for_leave,
+          status: leave.status,
         },
         emp: {
           name: emp ? emp.name : "N/A",
@@ -194,8 +198,25 @@ module.exports.manage_leaves_get = async (req, res) => {
       };
     })
   );
-  console.log(newLeaves, "newLeaves >>>>>>>>>>>");
+  // console.log(newLeaves, "newLeaves >>>>>>>>>>>");
   res.render("manage-leaves", { leave: newLeaves });
+};
+
+module.exports.update_status_put = async (req, res) => {
+  console.log(req.params.id);
+
+  await Leave.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        status: req.body.status,
+      },
+    }
+  )
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => console(err));
 };
 
 module.exports.emp_login_get = (req, res) => {
@@ -230,6 +251,7 @@ module.exports.apply_leave_get = async (req, res) => {
         from: leave.from,
         to: leave.to,
         reason_for_leave: leave.reason_for_leave,
+        status: leave.status,
       };
     })
   );
@@ -259,7 +281,7 @@ module.exports.apply_leave_form_post = async (req, res) => {
   const cookieData = req.cookies;
   const jwtData = cookieData.jwt;
   var decoded = jwt.verify(jwtData, "codeDrill secret");
-  console.log(decoded, "decoded >>>>>>>>>>>>>");
+  // console.log(decoded, "decoded >>>>>>>>>>>>>");
 
   const { from, to, reason_for_leave } = req.body;
   //console.log(from, "from>>>>>>>>");

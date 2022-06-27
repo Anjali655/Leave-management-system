@@ -75,6 +75,7 @@
           <tr>
           <div class="sales-details">
            
+            
             <th><ul class="details">
               <li class="topic">Applicant's name</li>
             </ul></th>
@@ -91,6 +92,7 @@
               <li class="topic">Reason for leave</li>
             </ul></th>
 
+
           <th><ul class="details">
             <li class="topic">Status</li>
           </ul></th>
@@ -101,6 +103,7 @@
             <tr>
           
             <% for(var i=0; i < leave.length; i++) { %>
+
             <th><ul class="details">
               <li><a href="#"><%= leave[i].emp.name %></a></li>
             </ul></th>
@@ -116,10 +119,17 @@
             <th><ul class="details">
               <li><a href="#"><%= leave[i].leave.reason_for_leave %></a></li>
             </ul></th>
-      
-            <th><ul class="details">
-              <li><a href="#" style="text-align:center;color:rgb(31, 193, 31);" id="approved" onclick="approved()"><i class='bx bxs-message-square-check approved'></i>
-              <a href="#" style="text-align:center;color:red;" id="disapproved" onclick="disapproved()"><i class='bx bxs-message-square-x Del-Emp disapproved'></i></li>
+
+
+            <th><ul class="details" id="<%= leave[i].leave.id %>">
+                <% if(leave[i].leave.status  === "Approved"){ %>
+                <p>Approved</p>
+                <% } else if(leave[i].leave.status  === "Disapproved"){ %>
+                <p>Disapproved</p>
+                <% } else { %>
+                  <button><li><a href="#" style="text-align:center;color:rgb(31, 193, 31);" id="approve" onclick="updateStatusOnClick([{id:`<%= leave[i].leave.id %>`}, {status: 'Approved'}])"><i class='bx bxs-message-square-check approved'></i></li></button>
+                    <button><li><a href="#" style="text-align:center;color:red;" id="disapproved" onclick="updateStatusOnClick([{id:`<%= leave[i].leave.id %>`}, {status: 'Disapproved'}])"><i class='bx bxs-message-square-x Del-Emp disapproved'></i></li></button>
+                <% } %>
             </ul></th>
       
             </tr>
@@ -129,7 +139,6 @@
 
       </table><br>
           
-
         </div>
         </div>
       </div>
@@ -148,13 +157,25 @@ sidebarBtn.onclick = function() {
 }
 
 
-function approved(){
- document.getElementById("approved").innerHTML = "Approved";
-}
 
-function disapproved(){
-  document.getElementById("disapproved").innerHTML = "Disapproved"
-}
+async function updateStatusOnClick(data){
+    const abc = document.getElementById("approve");
+    // console.log(data[0].id,data[1].status );
+    // console.log(typeof data[0].id, "data>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    const status = await fetch(`/update-status/${data[0].id}`, {
+      method:"PUT",
+      body: JSON.stringify({"status":data[1].status}),
+      headers:{ "Content-Type": "application/json"}
+    });
+    console.log(status.status);
+    if (status.status === 200) {
+      document.getElementById(`${data[0].id}`).innerHTML = data[1].status;
+        }
+    
+};
+
+
+
  </script>
 
 </body>

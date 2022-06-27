@@ -28,6 +28,8 @@ router.get("/manage-emp", authController.manage_emp_get);
 
 router.get("/manage-leaves", authController.manage_leaves_get);
 
+router.put("/update-status/:id", authController.update_status_put);
+
 router.get("/emp-login", authController.emp_login_get);
 
 router.post("/emp-login", authController.emp_login_post);
