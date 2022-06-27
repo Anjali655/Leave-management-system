@@ -14,12 +14,17 @@
             <span class="links_name">Employees</span>
           </a>
         </li>
-        <li>
+        <li class="back">
+          <a href="#">
+            <i class='bx bx-arrow-back'></i>
+            <span class="links_name">Back</span>
+          </a>
+        </li>
 
         <li class="log_out">
           <a href="#">
             <i class='bx bx-log-out'></i>
-            <span class="links_name">Log out</span>
+            <span class="links_name" class="log_out" onclick="logout()">Log out</span>
           </a>
         </li>
       </ul>
@@ -30,6 +35,7 @@
         <i class='bx bx-menu sidebarBtn'></i>
         <span class="dashboard">Manage Employees</span>
       </div>
+      
     
       <div class="profile-details">
         <img src="/admin.jpg" alt="">
@@ -167,6 +173,12 @@ sidebarBtn.onclick = function() {
   sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
 }
 
+
+  let back = document.querySelector(".back");
+  back.onclick = function() {
+    location.assign("/admin-dashboard")
+  }
+
   let addEmp = document.querySelector(".add_emp");
   addEmp.onclick = function() {
       location.assign("/add-emp");
@@ -192,7 +204,11 @@ sidebarBtn.onclick = function() {
       }); 
       
   };
+  async function logout(){
+    location.assign("/admin-logout");
+    // console.log("logged out");
 
+  };
 
  </script>
 

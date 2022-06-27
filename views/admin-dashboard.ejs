@@ -9,7 +9,7 @@
       <ul class="nav-links">
         <li>
           <a href="#" class="active">
-            <i class='bx bx-user' ></i>
+            <i class='bx bx-user'></i>
            <span class="links_name employees" id="employees">Employees</span>
           </a>
         </li>
@@ -19,13 +19,17 @@
             <span class="links_name" id="leaves">Leaves</span>
           </a>
         </li>
+        
 
-        <li class="log_out">
+       <li class="log_out">
           <a href="#">
             <i class='bx bx-log-out'></i>
-            <span class="links_name">Log out</span>
+            <span class="links_name" class="log_out" onclick="logout()">Log out</span>
           </a>
         </li>
+
+    
+
       </ul>
   </div>
   <section class="home-section">
@@ -49,13 +53,13 @@
       <div class="overview-boxes">
         <div class="box">
           <div class="right-side">
-            <div class="box-topic">Welcome</div>
+            <div class="box-topic"><h1>Welcome</h1></div>
             <div class="indicator">
-              <i class='bx bx-up-arrow-alt'></i>
-              <span class="text">Admin</span>
+              <!-- <i class='bx bx-up-arrow-alt'></i> -->
+              <!-- <span class="text"><h2>Admin</h2></span> -->
             </div>
           </div>
-          <i class='bx bx-cart-alt cart'></i>
+          <!-- <i class='bx bx-cart-alt cart'></i> -->
         </div>
       </div>
     </div>
@@ -83,6 +87,31 @@ sidebarBtn.onclick = function() {
   function leaves(){
     location.assign("/manage-leaves");
   }
+
+
+  // document.querySelector("log_out").addEventListener("click", logout);
+  async function logout(){
+    location.assign("/admin-logout");
+    // console.log("logged out");
+
+  };
+
+
+
+
+  // document.getElementById("log_out").onclick = function() {logout()};
+  // async function logout(req,res) {
+  //   res.clearCookie("jwt", "");
+  //   res.redirect("/admin-login");
+  //   console.log("logged out");
+  // }
+
+  // const logout = async (req, res, next) => {
+  // res.clearCookie("jwt");
+  // res.redirect("/admin-login");
+  // console.log("logged out");
+  //   };
+
  </script>
 
 </body>

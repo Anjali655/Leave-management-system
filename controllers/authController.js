@@ -2,8 +2,9 @@ const Admin = require("../models/admin");
 const Employee = require("../models/emp");
 const jwt = require("jsonwebtoken");
 const Leave = require("../models/leave");
-const { find } = require("../models/admin");
+// const Admin = require("../models/admin");
 const router = require("../routes/authRoutes");
+// const userVerificationCheck = require("../middleware/userVerificationCheck");
 
 // handle errors
 const handleErrors = (err) => {
@@ -37,7 +38,36 @@ const handleErrors = (err) => {
   return errors;
 };
 
+async function userVerificationCheck(req, res, next) {
+  const cookieData = await req.cookies; // took cookie data
+
+  const jwtData = cookieData.jwt ?? ""; // got the jwt cookie from the cookie data
+
+  var decoded =
+    jwtData.maxAge === 0 ? null : jwt.verify(jwtData, "codeDrill secret"); // decoded the jwt token from the cookie data
+  var admin = decoded ? await Admin.findById(decoded?.id) : null; // taken the user id from the jwt and look for the user in the admin
+  var user = decoded ? await Employee.findById(decoded?.id) : null; // taken the user data from the jwt and look for the user in emp
+
+  if (admin) {
+    return {
+      type: "admin",
+      verified: true,
+    };
+  } else if (user) {
+    return {
+      type: "emp",
+      verified: true,
+    };
+  } else {
+    return {
+      type: undefined,
+      verified: false,
+    };
+  }
+}
+
 // creating json web token
+
 const maxAge = 3 * 24 * 60 * 60;
 let emp_id = Leave.emp_id;
 const createToken = (id) => {
@@ -79,37 +109,52 @@ module.exports.admin_login_post = async (req, res) => {
 };
 
 module.exports.admin_dashboard_get = async function (req, res) {
-  res.render("admin-dashboard");
+  var check = await userVerificationCheck(req, res);
+  // console.log(check, "check >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  if (check.type === "admin" && check.verified === true) {
+    res.render("admin-dashboard");
+  } else {
+    res.render("admin-login");
+  }
 };
 
-module.exports.add_emp_get = (req, res) => {
-  res.render("add-emp");
+module.exports.add_emp_get = async (req, res) => {
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "admin" && check.verified === true) {
+    res.render("add-emp");
+  }
 };
 
 module.exports.add_emp_post = async (req, res) => {
-  const { name, department, email, password, mobile } = req.body;
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "admin" && check.verified === true) {
+    const { name, department, email, password, mobile } = req.body;
 
-  // console.log(req.body);
-  try {
-    let employee = await Employee.create({
-      name,
-      department,
-      email,
-      password,
-      mobile,
-    });
+    // console.log(req.body);
+    try {
+      let employee = await Employee.create({
+        name,
+        department,
+        email,
+        password,
+        mobile,
+      });
 
-    res.status(200).json({ employee: employee._id });
-  } catch (err) {
-    const errors = handleErrors(err);
-    res.status(404).json({ errors });
+      res.status(200).json({ employee: employee._id });
+    } catch (err) {
+      const errors = handleErrors(err);
+      res.status(404).json({ errors });
+    }
   }
 };
 
 module.exports.get_allemp = async (req, res) => {
-  let allEmp = await Employee.find({});
-  // console.log(allEmp);
-  res.status(200).send(allEmp);
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    let allEmp = await Employee.find({});
+    // console.log(allEmp);
+    res.status(200).send(allEmp);
+  }
 };
 
 module.exports.get_emp = async (req, res) => {
@@ -160,46 +205,52 @@ module.exports.update_emp_put = async (req, res) => {
 };
 
 module.exports.manage_emp_get = async (req, res) => {
-  let allEmp = await Employee.find({});
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "admin" && check.verified === true) {
+    let allEmp = await Employee.find({});
 
-  let newData = await Promise.all(
-    allEmp.map((emp) => {
-      return {
-        _id: emp._id.toString(),
-        name: emp.name,
-        department: emp.department,
-        email: emp.email,
-        mobile: emp.mobile,
-      };
-    })
-  );
-  res.render("manage-emp", { emp: newData });
+    let newData = await Promise.all(
+      allEmp.map((emp) => {
+        return {
+          _id: emp._id.toString(),
+          name: emp.name,
+          department: emp.department,
+          email: emp.email,
+          mobile: emp.mobile,
+        };
+      })
+    );
+    res.render("manage-emp", { emp: newData });
+  }
 };
 
 // onclick="approve(`<%= leave[i].emp.name %>`)"
 
 module.exports.manage_leaves_get = async (req, res) => {
-  let allleaves = await Leave.find({});
-  let newLeaves = await Promise.all(
-    allleaves.map(async (leave) => {
-      let emp = await Employee.findById(leave.emp_id);
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "admin" && check.verified === true) {
+    let allleaves = await Leave.find({});
+    let newLeaves = await Promise.all(
+      allleaves.map(async (leave) => {
+        let emp = await Employee.findById(leave.emp_id);
 
-      return {
-        leave: {
-          id: leave._id,
-          from: leave.from,
-          to: leave.to,
-          reason_for_leave: leave.reason_for_leave,
-          status: leave.status,
-        },
-        emp: {
-          name: emp ? emp.name : "N/A",
-        },
-      };
-    })
-  );
-  // console.log(newLeaves, "newLeaves >>>>>>>>>>>");
-  res.render("manage-leaves", { leave: newLeaves });
+        return {
+          leave: {
+            id: leave._id,
+            from: leave.from,
+            to: leave.to,
+            reason_for_leave: leave.reason_for_leave,
+            status: leave.status,
+          },
+          emp: {
+            name: emp ? emp.name : "N/A",
+          },
+        };
+      })
+    );
+    // console.log(newLeaves, "newLeaves >>>>>>>>>>>");
+    res.render("manage-leaves", { leave: newLeaves });
+  }
 };
 
 module.exports.update_status_put = async (req, res) => {
@@ -223,8 +274,13 @@ module.exports.emp_login_get = (req, res) => {
   res.render("emp-login");
 };
 
-module.exports.emp_dashboard_get = (req, res) => {
-  res.render("emp-dashboard");
+module.exports.emp_dashboard_get = async (req, res) => {
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    res.render("emp-dashboard");
+  } else {
+    res.render("emp-login");
+  }
 };
 
 module.exports.emp_login_post = async (req, res) => {
@@ -244,71 +300,96 @@ module.exports.emp_login_post = async (req, res) => {
 };
 
 module.exports.apply_leave_get = async (req, res) => {
-  let allleaves = await Leave.find({});
-  let newLeaves = await Promise.all(
-    allleaves.map((leave) => {
-      return {
-        from: leave.from,
-        to: leave.to,
-        reason_for_leave: leave.reason_for_leave,
-        status: leave.status,
-      };
-    })
-  );
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    let allleaves = await Leave.find({});
+    let newLeaves = await Promise.all(
+      allleaves.map((leave) => {
+        return {
+          from: leave.from,
+          to: leave.to,
+          reason_for_leave: leave.reason_for_leave,
+          status: leave.status,
+        };
+      })
+    );
 
-  res.render("apply-leave", { leave: newLeaves });
+    res.render("apply-leave", { leave: newLeaves });
+  }
 };
 
 module.exports.my_leaves_get = async (req, res) => {
-  let allleaves = await Leave.find({});
-  let newLeaves = await Promise.all(
-    allleaves.map((leave) => {
-      return {
-        from: leave.from,
-        to: leave.to,
-        reason_for_leave: leave.reason_for_leave,
-      };
-    })
-  );
-  res.render("my-leaves", { leave: newLeaves });
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    let allleaves = await Leave.find({});
+    let newLeaves = await Promise.all(
+      allleaves.map((leave) => {
+        return {
+          from: leave.from,
+          to: leave.to,
+          reason_for_leave: leave.reason_for_leave,
+        };
+      })
+    );
+    res.render("my-leaves", { leave: newLeaves });
+  }
 };
 
-module.exports.apply_leave_form_get = (req, res) => {
-  res.render("applyleaveform");
+module.exports.apply_leave_form_get = async (req, res) => {
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    res.render("applyleaveform");
+  }
 };
 
 module.exports.apply_leave_form_post = async (req, res) => {
-  const cookieData = req.cookies;
-  const jwtData = cookieData.jwt;
-  var decoded = jwt.verify(jwtData, "codeDrill secret");
-  // console.log(decoded, "decoded >>>>>>>>>>>>>");
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    const cookieData = req.cookies;
+    const jwtData = cookieData.jwt;
+    var decoded = jwt.verify(jwtData, "codeDrill secret");
+    // console.log(decoded, "decoded >>>>>>>>>>>>>");
 
-  const { from, to, reason_for_leave } = req.body;
-  //console.log(from, "from>>>>>>>>");
-  var startDate = from.split("-").reverse().join("-");
-  // const hello = toString(from.split("-").reverse().join("-"));
-  // console.log(hello, "hello");
-  var endDate = to.split("-").reverse().join("-");
-  // console.log(toString(startDate), "startDate>>>>>>>>>>>>>>>");
-  try {
-    // let leave = Leave.create({ from: newFrom, to: newTo, reason_for_leave });
-    let leave = await Leave.create({
-      emp_id: decoded.id,
-      from: startDate,
-      to: endDate,
-      reason_for_leave: reason_for_leave,
-      status: "Pending",
-    });
-    // console.log(leave, "leave >>>>>>>>>>>>>>>>>>>>>>");
-    res.status(200).json({ leave });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ error: err });
+    const { from, to, reason_for_leave } = req.body;
+    //console.log(from, "from>>>>>>>>");
+    var startDate = from.split("-").reverse().join("-");
+    // const hello = toString(from.split("-").reverse().join("-"));
+    // console.log(hello, "hello");
+    var endDate = to.split("-").reverse().join("-");
+    // console.log(toString(startDate), "startDate>>>>>>>>>>>>>>>");
+    try {
+      // let leave = Leave.create({ from: newFrom, to: newTo, reason_for_leave });
+      let leave = await Leave.create({
+        emp_id: decoded.id,
+        from: startDate,
+        to: endDate,
+        reason_for_leave: reason_for_leave,
+        status: "Pending",
+      });
+      // console.log(leave, "leave >>>>>>>>>>>>>>>>>>>>>>");
+      res.status(200).json({ leave });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: err });
+    }
   }
 };
 
 module.exports.get_allleaves = async (req, res) => {
-  let allleaves = await Leave.find({});
-  console.log(allleaves);
-  res.status(200).json({ leaves: allleaves });
+  var check = await userVerificationCheck(req, res);
+  if (check.type === "emp" && check.verified === true) {
+    let allleaves = await Leave.find({});
+    console.log(allleaves);
+    res.status(200).json({ leaves: allleaves });
+  }
+};
+
+module.exports.admin_logout = async (req, res) => {
+  res.cookie("jwt", { maxAge: 0 });
+  res.redirect("/admin-login");
+};
+
+module.exports.emp_logout = async (req, res) => {
+  res.cookie("jwt", { maxAge: 0 });
+  res.redirect("emp-login");
 };

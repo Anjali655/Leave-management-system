@@ -465,3 +465,9 @@ nav .profile-details i{
 .errors{
   color: red
 }
+
+.back{
+  position: absolute;
+  margin-bottom: 0;
+  width: 100%;
+}

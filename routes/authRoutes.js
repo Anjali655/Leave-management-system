@@ -46,4 +46,8 @@ router.post("/applyleaveform", authController.apply_leave_form_post);
 
 router.get("/get-leaves", authController.get_allleaves);
 
+router.get("/admin-logout", authController.admin_logout);
+
+router.get("/emp-logout", authController.emp_logout);
+
 module.exports = router;

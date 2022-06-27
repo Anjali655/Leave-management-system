@@ -14,12 +14,17 @@
             <span class="links_name">Apply for Leave</span>
           </a>
         </li>
-        <li>
+        <li class="back">
+          <a href="#">
+            <i class='bx bx-arrow-back'></i>
+            <span class="links_name">Back</span>
+          </a>
+        </li>
 
         <li class="log_out">
           <a href="#">
             <i class='bx bx-log-out'></i>
-            <span class="links_name">Log out</span>
+            <span class="links_name" class="log_out" onclick="logout()">Log out</span>
           </a>
         </li>
       </ul>
@@ -158,6 +163,16 @@ function addLeaves(){
   location.assign("/applyleaveform");
 }
 
+let back = document.querySelector(".back");
+  back.onclick = function() {
+    location.assign("/emp-dashboard")
+  }
+
+  async function logout(){
+    location.assign("/emp-logout");
+    // console.log("logged out");
+
+  };
 
  </script>
 

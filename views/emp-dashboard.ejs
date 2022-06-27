@@ -24,7 +24,7 @@
         <li class="log_out">
           <a href="#">
             <i class='bx bx-log-out'></i>
-            <span class="links_name">Log out</span>
+            <span class="links_name" class="log_out" onclick="logout()">Log out</span>
           </a>
         </li>
       </ul>
@@ -33,7 +33,7 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Leave Applications</span>
+        <span class="dashboard">My Dashboard</span>
       </div>
     
       <!-- <div class="profile-details">
@@ -48,8 +48,8 @@
         
         <div class="box">
           <div class="right-side">
-            <div class="box-topic">Your leave section</div>
-            <div class="number">20</div>
+            <div class="box-topic"><h1>Welcome</h1></div>
+            <div class="number"></div>
             <div class="indicator">
               <!-- <i class='bx bx-up-arrow-alt'></i>
               <span class="text">Up from yesterday</span> -->
@@ -190,6 +190,12 @@ document.getElementById("my_leaves").addEventListener("click",my_leaves )
 function my_leaves(){
   location.assign("/my-leaves");
 }
+
+async function logout(){
+    location.assign("/emp-logout");
+    // console.log("logged out");
+
+  };
 
  </script>
 
